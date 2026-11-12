@@ -4,12 +4,11 @@ Documento de retomada. Atualizado em 12/11/2026.
 
 ## O que é
 
-Versão em **C++** do autoclicker que antes era em Rust (`C:\Users\Luiz\autoclicker\`, mantido
-como referência). Interface com **Dear ImGui** sobre **Direct3D 11**, cliques no nível do sistema
+Versão em **C++** do autoclicker que antes era em Rust (projeto separado, mantido como
+referência). Interface com **Dear ImGui** sobre **Direct3D 11**, cliques no nível do sistema
 operacional (Windows `SendInput`). É uma ferramenta de SO, não injeta em jogo nenhum.
 
-- **Projeto:** `C:\Users\Luiz\autoclicker-cpp\`
-- **Executável:** `C:\Users\Luiz\autoclicker-cpp\build\DzkLP-Clicker.exe`
+- **Executável:** `build\DzkLP-Clicker.exe` (caminhos relativos à raiz do repositório)
 - `.exe` autossuficiente (runtime estático): só usa DLLs que já vêm no Windows 10/11.
 - Lê e grava o mesmo `autoclicker_config.json` da versão Rust (formato idêntico).
 
@@ -51,10 +50,12 @@ A versão do app fica no `project(... VERSION x.y.z)` do `CMakeLists.txt`.
 
 ## Como compilar
 
-Ferramentas já instaladas: MinGW-w64 (g++ 16), CMake e Ninja em `C:\mingw64\bin`.
+Precisa de MinGW-w64 (g++ 13 ou mais novo), CMake e Ninja no PATH. O `build.ps1` também
+procura em `C:\mingw64\bin`, se essa pasta existir.
+
+Na raiz do repositório:
 
 ```
-cd C:\Users\Luiz\autoclicker-cpp
 .\build.ps1          # gera build\DzkLP-Clicker.exe
 .\build.ps1 -Test    # e roda o teste de CPS
 ```

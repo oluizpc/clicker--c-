@@ -3,7 +3,8 @@
 #   .\build.ps1 -Test    -> também roda o teste de precisão do CPS
 param([switch]$Test)
 $ErrorActionPreference = "Stop"
-$env:PATH = "C:\mingw64\bin;$env:PATH"
+# Usa o MinGW de C:\mingw64 se existir; senão, o que estiver no PATH.
+if (Test-Path "C:\mingw64\bin") { $env:PATH = "C:\mingw64\bin;$env:PATH" }
 Set-Location $PSScriptRoot
 
 cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release

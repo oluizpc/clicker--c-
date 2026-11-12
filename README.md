@@ -5,7 +5,7 @@ modos toggle/segurar, hotkey global, atraso, limite, rajada, filtro de janela, p
 
 ## Compilar
 
-Precisa de MinGW-w64, CMake e Ninja (aqui em `C:\mingw64\bin`).
+Precisa de MinGW-w64, CMake e Ninja no PATH (o `build.ps1` também procura em `C:\mingw64\bin`).
 
 ```
 .\build.ps1
