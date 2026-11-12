@@ -359,6 +359,16 @@ void clicker_advanced(const Palette& p, Settings& s, Shared& shared, float width
         if (s.target_window_only && !is_blank(s.target_window_title)) {
             ui::text("Alvo: " + ellipsize(s.target_window_title, 40), 11.0f, p.muted);
         }
+
+        ImGui::Checkbox("Mexer o cursor", &s.pos_jitter);
+        ImGui::SameLine();
+        ImGui::BeginDisabled(!s.pos_jitter);
+        ImGui::SetNextItemWidth(dw);
+        ImGui::DragInt("##posjit", &s.pos_jitter_px, 0.1f, 1, 20, "até %d px", clamp);
+        ImGui::EndDisabled();
+        if (ImGui::IsItemHovered(ImGuiHoveredFlags_AllowWhenDisabled))
+            ImGui::SetTooltip("A cada clique o cursor vai para um ponto aleatório perto de onde está\n"
+                              "e volta ao lugar quando o clique para. Em jogo, mexe um pouco a mira.");
         ImGui::Separator();
 
         ImGui::AlignTextToFramePadding();

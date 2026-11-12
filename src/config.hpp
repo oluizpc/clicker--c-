@@ -24,6 +24,10 @@ struct Settings {
     bool dark_mode = true;
     // Ao minimizar, some da barra de tarefas e fica como ícone perto do relógio.
     bool minimize_to_tray = true;
+    // Jitter de posição: a cada clique o cursor vai para um ponto aleatório a até
+    // N pixels do lugar original (e volta ao parar).
+    bool pos_jitter = false;
+    int pos_jitter_px = 3;
 
     bool operator==(const Settings&) const = default;
 };

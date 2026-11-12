@@ -2,6 +2,7 @@
 
 #include <windows.h>
 
+#include <algorithm>
 #include <filesystem>
 #include <fstream>
 #include <sstream>
@@ -29,6 +30,8 @@ static void to_json(json& j, const Settings& s) {
         {"target_window_title", s.target_window_title},
         {"dark_mode", s.dark_mode},
         {"minimize_to_tray", s.minimize_to_tray},
+        {"pos_jitter", s.pos_jitter},
+        {"pos_jitter_px", s.pos_jitter_px},
     };
 }
 
@@ -52,6 +55,8 @@ static Settings settings_from_json(const json& j) {
     s.target_window_title = j.value("target_window_title", d.target_window_title);
     s.dark_mode = j.value("dark_mode", d.dark_mode);
     s.minimize_to_tray = j.value("minimize_to_tray", d.minimize_to_tray);
+    s.pos_jitter = j.value("pos_jitter", d.pos_jitter);
+    s.pos_jitter_px = std::clamp(j.value("pos_jitter_px", d.pos_jitter_px), 1, 20);
     if (s.button > 2) s.button = 0;
     if (s.mode > 2) s.mode = 0;
     return s;

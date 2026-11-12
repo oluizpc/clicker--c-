@@ -2,7 +2,9 @@
 // entrada falsa que só conta os cliques. Não clica nada de verdade.
 #include <windows.h>
 
+#include <algorithm>
 #include <atomic>
+#include <cstdlib>
 #include <chrono>
 #include <cstdio>
 #include <optional>
@@ -19,6 +21,15 @@ static std::atomic<uint64_t> g_clicks{0};
 MouseButton mouse_button_from(uint8_t) { return MouseButton::Left; }
 const char* mouse_button_label(MouseButton) { return ""; }
 void send_click(MouseButton) { g_clicks.fetch_add(1); }
+// Posição falsa do cursor (relativa à origem) e maior afastamento visto.
+static std::atomic<int> g_x{0}, g_y{0}, g_max_off{0}, g_moves{0};
+void move_cursor(int dx, int dy) {
+    if (dx == 0 && dy == 0) return;  // igual à versão real
+    int x = g_x += dx, y = g_y += dy;
+    int off = std::max(std::abs(x), std::abs(y));
+    if (off > g_max_off) g_max_off = off;
+    g_moves.fetch_add(1);
+}
 bool key_down(int) { return false; }
 std::string foreground_title() { return "Minecraft 1.8.9"; }
 std::vector<std::string> list_windows() { return {}; }
@@ -125,6 +136,25 @@ int main() {
     double avg = double(g_clicks.load()) / 3.0;
     std::printf("Jitter 10-20 -> media %.2f\n", avg);
     check(avg > 12.5 && avg < 17.5, "media perto de 15");
+    check(g_moves.load() == 0, "sem jitter de posicao: cursor parado");
+
+    // 7) Jitter de posição: fica dentro do raio e volta à origem ao parar.
+    s.jitter = false;
+    s.min_cps = s.max_cps = 100.0f;
+    s.pos_jitter = true;
+    s.pos_jitter_px = 4;
+    sh.set(s);
+    sh.set_clicking(true);
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+    int moves_during = g_moves.load();
+    sh.set_clicking(false);
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    std::printf("Jitter posicao 4px -> %d movimentos, afastamento max %d, final (%d,%d)\n",
+                moves_during, g_max_off.load(), g_x.load(), g_y.load());
+    check(moves_during > 20, "move o cursor a cada clique");
+    check(g_max_off.load() <= 4, "nunca passa do raio");
+    check(g_max_off.load() >= 3, "usa o raio todo");
+    check(g_x.load() == 0 && g_y.load() == 0, "volta para a origem ao parar");
 
     sh.running = false;
     w.join();

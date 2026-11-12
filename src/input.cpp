@@ -40,6 +40,14 @@ void send_click(MouseButton btn) {
     SendInput(2, inputs, sizeof(INPUT));
 }
 
+void move_cursor(int dx, int dy) {
+    if (dx == 0 && dy == 0) return;
+    INPUT in = mouse_input(MOUSEEVENTF_MOVE);
+    in.mi.dx = dx;
+    in.mi.dy = dy;
+    SendInput(1, &in, sizeof(INPUT));
+}
+
 bool key_down(int vk) {
     return (static_cast<unsigned short>(GetAsyncKeyState(vk)) & 0x8000) != 0;
 }

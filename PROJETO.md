@@ -18,7 +18,7 @@ operacional (Windows `SendInput`). É uma ferramenta de SO, não injeta em jogo 
 - Botão **esquerdo / direito / meio**
 - Modos: **Toggle**, **Segurar tecla**, **Segurar mouse esquerdo**
 - **Captura de hotkey** (clica em "Tecla" e aperta qualquer tecla; Esc cancela)
-- **Atraso ao iniciar**, **limite de cliques**, **rajada**
+- **Atraso ao iniciar**, **limite de cliques**, **rajada**, **jitter de posição** do cursor
 - **Tela inicial de escolha da janela** (filtro "Só Minecraft" / "Todas", busca, duplo clique)
 - **Perfis** salvos em disco, **tema claro/escuro**
 - **Timing de alta precisão** (timer de alta resolução + spin nos últimos 1,5 ms)
@@ -76,7 +76,10 @@ limite, janela-alvo, atraso, rajada e jitter conferidos.
 - [x] Minimizar para a **bandeja** (system tray), feito em 12/11/2026
 - [x] Mostrar a **tecla atual** também no card de status, feito em 12/11/2026
 - [x] Janela **lembrar tamanho/posição**, feito em 12/11/2026
-- [ ] Jitter de **posição** do cursor (mover alguns pixels por clique)
+- [x] Jitter de **posição** do cursor, feito em 12/11/2026 (Avançado > "Mexer o cursor", 1 a 20 px).
+  A cada clique o cursor vai para um ponto aleatório dentro do raio em volta da origem (não
+  acumula) e volta à origem ao parar. Usa movimento relativo (`SendInput`), então a velocidade
+  do ponteiro do Windows pode deixar o deslocamento real um pouco maior ou menor que N px.
 
 ## Fora de escopo (combinado)
 

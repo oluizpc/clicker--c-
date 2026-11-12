@@ -76,9 +76,30 @@ static void hotkey_loop(Shared& sh) {
     }
 }
 
+// Jitter de posição: guarda o deslocamento atual em relação ao ponto de origem
+// (onde o cursor estava) para nunca "andar" além do raio e voltar ao parar.
+struct PosJitter {
+    int ox = 0, oy = 0;
+
+    // Leva o cursor para um ponto aleatório dentro do raio (quadrado de lado 2r+1).
+    void jump(int r, std::mt19937& rng) {
+        std::uniform_int_distribution<int> d(-r, r);
+        int tx = d(rng), ty = d(rng);
+        move_cursor(tx - ox, ty - oy);
+        ox = tx;
+        oy = ty;
+    }
+    // Volta para a origem.
+    void reset() {
+        move_cursor(-ox, -oy);
+        ox = oy = 0;
+    }
+};
+
 // Thread que efetivamente envia os cliques.
 static void clicker_loop(Shared& sh) {
     std::mt19937 rng{std::random_device{}()};
+    PosJitter pj;
 
     while (sh.running.load()) {
         // Rajada avulsa (botão "Disparar"), independente do toggle.
@@ -93,6 +114,7 @@ static void clicker_loop(Shared& sh) {
         }
 
         if (!sh.clicking.load()) {
+            pj.reset();
             sleep_us(5000);
             continue;
         }
@@ -110,6 +132,7 @@ static void clicker_loop(Shared& sh) {
         if (s.target_window_only && s.target_window_title.find_first_not_of(" \t") != std::string::npos) {
             std::string title = to_lower(foreground_title());
             if (title.find(to_lower(s.target_window_title)) == std::string::npos) {
+                pj.reset();
                 sleep_us(20000);
                 continue;
             }
@@ -128,12 +151,18 @@ static void clicker_loop(Shared& sh) {
         }
         cps = std::max(cps, 0.5f);
 
+        if (s.pos_jitter) {
+            pj.jump(std::clamp(s.pos_jitter_px, 1, 20), rng);
+        } else {
+            pj.reset();
+        }
         send_click(mouse_button_from(s.button));
         sh.clicks_done.fetch_add(1);
         sh.cps_now.store(cps);
 
         sleep_interruptible(sh, secs(1.0f / cps));
     }
+    pj.reset();
 }
 
 void Workers::start(Shared& shared) {

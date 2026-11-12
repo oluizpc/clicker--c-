@@ -14,6 +14,10 @@ const char* mouse_button_label(MouseButton b);
 
 void send_click(MouseButton btn);
 
+// Move o cursor (dx, dy) em relação à posição atual. É movimento relativo de mouse,
+// então jogos que leem o mouse "cru" (ex.: câmera do Minecraft) também recebem.
+void move_cursor(int dx, int dy);
+
 // true se a tecla do virtual-key code está pressionada agora.
 bool key_down(int vk);
 
