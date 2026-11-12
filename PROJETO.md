@@ -74,7 +74,7 @@ limite, janela-alvo, atraso, rajada e jitter conferidos.
 ## Pendentes (melhorias)
 
 - [x] Minimizar para a **bandeja** (system tray), feito em 12/11/2026
-- [ ] Mostrar a **tecla atual** também no card de status
+- [x] Mostrar a **tecla atual** também no card de status, feito em 12/11/2026
 - [x] Janela **lembrar tamanho/posição**, feito em 12/11/2026
 - [ ] Jitter de **posição** do cursor (mover alguns pixels por clique)
 

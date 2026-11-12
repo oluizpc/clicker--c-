@@ -242,6 +242,18 @@ bool hero(const Palette& p, bool active, float cps, float cps_meas, uint64_t cli
     ImGui::SameLine(0, S(32));
     stat(fg, sub, std::to_string(clicks), "cliques");
 
+    // Tecla que liga/desliga (ou o gatilho, no modo segurar mouse). Quebra a linha
+    // se não couber ao lado das outras estatísticas.
+    std::string key = s.mode == 2 ? "Mouse esq." : vk_name(s.hotkey_vk);
+    const char* key_cap = s.mode == 2 ? "gatilho" : "tecla";
+    ImGui::PushFont(mono_font(), 22.0f);
+    float key_w = ImGui::CalcTextSize(key.c_str()).x;
+    ImGui::PopFont();
+    float right = ImGui::GetItemRectMax().x + S(32) + key_w;
+    float limit = ImGui::GetWindowPos().x + ImGui::GetWindowWidth() - ImGui::GetStyle().WindowPadding.x;
+    if (right <= limit) ImGui::SameLine(0, S(32));
+    stat(fg, sub, key, key_cap);
+
     ui::end_card(0);
     return toggled;
 }
