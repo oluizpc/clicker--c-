@@ -1,0 +1,29 @@
+// Ícone "D" embutido no .exe (aparece no Explorer, na janela e na barra de tarefas)
+// e informações de versão (Propriedades > Detalhes).
+#include <winver.h>
+#include "version.h"
+
+1 ICON "../assets/icon.ico"
+
+VS_VERSION_INFO VERSIONINFO
+FILEVERSION     APP_VERSION_MAJOR, APP_VERSION_MINOR, APP_VERSION_PATCH, 0
+PRODUCTVERSION  APP_VERSION_MAJOR, APP_VERSION_MINOR, APP_VERSION_PATCH, 0
+FILEOS          VOS_NT_WINDOWS32
+FILETYPE        VFT_APP
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041604B0"
+        BEGIN
+            VALUE "FileDescription", "DzkLP - Clicker"
+            VALUE "ProductName", "DzkLP - Clicker"
+            VALUE "OriginalFilename", "DzkLP-Clicker.exe"
+            VALUE "FileVersion", APP_VERSION
+            VALUE "ProductVersion", APP_VERSION
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x0416, 1200
+    END
+END

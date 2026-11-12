@@ -1,0 +1,11 @@
+# Saída do CMake
+/build/
+
+# Config gerado pelo app ao lado do exe
+autoclicker_config.json
+
+# Lixo de SO / editor
+Thumbs.db
+.DS_Store
+.vscode/
+.idea/
